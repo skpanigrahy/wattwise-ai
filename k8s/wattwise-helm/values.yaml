@@ -1,0 +1,226 @@
+# Default values for wattwise-ai.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global settings
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# Backend configuration
+backend:
+  replicaCount: 2
+  
+  image:
+    repository: wattwise/backend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  env:
+    DEBUG: "false"
+    PORT: "8000"
+  
+  envFrom:
+    - secretRef:
+        name: wattwise-secrets
+    - configMapRef:
+        name: wattwise-config
+
+# Frontend configuration
+frontend:
+  replicaCount: 2
+  
+  image:
+    repository: wattwise/frontend
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: ClusterIP
+    port: 8501
+    targetPort: 8501
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+  
+  env:
+    PORT: "8501"
+  
+  envFrom:
+    - configMapRef:
+        name: wattwise-config
+
+# PostgreSQL configuration (using Bitnami chart)
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "wattwise123"
+    username: "wattwise"
+    password: "wattwise123"
+    database: "wattwise_db"
+  
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+    
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+
+# External PostgreSQL configuration (when postgresql.enabled = false)
+externalDatabase:
+  host: ""
+  port: 5432
+  username: "wattwise"
+  password: "wattwise123"
+  database: "wattwise_db"
+  existingSecret: ""
+  existingSecretPasswordKey: ""
+
+# Prometheus configuration
+prometheus:
+  enabled: true
+  server:
+    persistentVolume:
+      enabled: true
+      size: 10Gi
+    
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+# Grafana configuration
+grafana:
+  enabled: true
+  adminPassword: "admin123"
+  
+  persistence:
+    enabled: true
+    size: 5Gi
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  
+  hosts:
+    - host: wattwise.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+        - path: /api
+          pathType: Prefix
+          service: backend
+  
+  tls: []
+    # - secretName: wattwise-tls
+    #   hosts:
+    #     - wattwise.local
+
+# Service Account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod Security Context
+podSecurityContext:
+  fsGroup: 2000
+
+# Security Context
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity: {}
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Network Policy
+networkPolicy:
+  enabled: false
+
+# ConfigMap data
+config:
+  # Backend configuration
+  DATABASE_URL: "postgresql://wattwise:wattwise123@wattwise-ai-postgresql:5432/wattwise_db"
+  
+  # Frontend configuration
+  BACKEND_URL: "http://wattwise-ai-backend:8000"
+
+# Secret data (base64 encoded)
+secrets:
+  # OpenAI API Key (optional)
+  OPENAI_API_KEY: ""
+  
+  # Database credentials
+  DB_PASSWORD: "d2F0dHdpc2UxMjM="  # wattwise123
+

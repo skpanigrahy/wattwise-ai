@@ -1,0 +1,44 @@
+apiVersion: v2
+name: wattwise-ai
+description: A Helm chart for WattWise AI - Smart AI Workload Scheduler for Green Energy Optimization
+
+# A chart can be either an 'application' or a 'library' chart.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application.
+appVersion: "1.0.0"
+
+keywords:
+  - ai
+  - green-energy
+  - workload-scheduler
+  - sustainability
+  - machine-learning
+
+home: https://github.com/your-org/wattwise-ai
+sources:
+  - https://github.com/your-org/wattwise-ai
+
+maintainers:
+  - name: WattWise AI Team
+    email: team@wattwise.ai
+
+dependencies:
+  - name: postgresql
+    version: 12.1.9
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: prometheus
+    version: 15.18.0
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.enabled
+  - name: grafana
+    version: 6.50.7
+    repository: https://grafana.github.io/helm-charts
+    condition: grafana.enabled
+
