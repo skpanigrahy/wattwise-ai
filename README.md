@@ -221,10 +221,15 @@ python run_tests.py --type scheduler
 
 ## 📊 Usage Guide
 
-### Scheduling a Workload
+WattWise AI supports multiple workflows across **GreenOps, CostOps, and AI Intelligence**.
 
-1. **Via Dashboard**: Navigate to "Schedule Workload" page
-2. **Via API**: POST to `/jobs/schedule`
+---
+
+### 🌱 1. Scheduling a Workload (GreenOps)
+
+Optimize where your AI workloads should run based on energy, cost, and carbon impact.
+
+#### ➤ Via API
 
 ```python
 import requests
@@ -243,10 +248,92 @@ workload = {
 
 response = requests.post("http://localhost:8000/jobs/schedule", json=workload)
 result = response.json()
-print(f"Scheduled to region: {result['recommended_region']}")
+
+print(f"Recommended region: {result['recommended_region']}")
 ```
 
-### Querying the AI Assistant
+---
+
+### 💰 2. Tracking AI Usage (CostOps)
+
+Track token usage and calculate cost per request.
+
+```python
+usage = {
+    "user_id": "santosh",
+    "model": "gpt-4o",
+    "source": "api",
+    "input_tokens": 1000,
+    "output_tokens": 500
+}
+
+response = requests.post("http://localhost:8000/costops/usage", json=usage)
+print(response.json())
+```
+
+---
+
+### 📊 3. Cost Analytics
+
+Get insights into AI spending across models.
+
+```python
+response = requests.get("http://localhost:8000/costops/analytics/models")
+print(response.json())
+```
+
+---
+
+### 🧠 4. Model Optimization
+
+Find cheaper alternatives for your current model usage.
+
+```python
+payload = {
+    "model": "gpt-4o",
+    "input_tokens": 1000,
+    "output_tokens": 500
+}
+
+response = requests.post("http://localhost:8000/costops/optimize/model", json=payload)
+print(response.json())
+```
+
+---
+
+### ✍️ 5. Prompt Optimization
+
+Reduce token usage by improving prompt efficiency.
+
+```python
+payload = {
+    "prompt": "Please explain in detail how microservices architecture works"
+}
+
+response = requests.post("http://localhost:8000/costops/optimize/prompt", json=payload)
+print(response.json())
+```
+
+---
+
+### 🔬 6. Multi-Model Benchmarking
+
+Compare cost vs quality across models.
+
+```python
+payload = {
+    "prompt": "Explain microservices architecture with examples"
+}
+
+response = requests.post("http://localhost:8000/costops/advanced/benchmark", json=payload)
+print(response.json())
+```
+
+---
+
+### 🤖 7. Querying the AI Assistant
+
+Ask questions about green energy and workload optimization.
 
 ```python
 query = {
@@ -256,6 +343,19 @@ query = {
 response = requests.post("http://localhost:8000/agent/query", json=query)
 print(response.json()["response"])
 ```
+
+---
+
+## 🧠 Summary
+
+WattWise AI enables:
+
+- 🌱 Smart workload scheduling (GreenOps)
+- 💰 AI cost tracking & analytics (CostOps)
+- 🧠 Intelligent optimization (Model + Prompt)
+- 🔬 Advanced benchmarking (Cost vs Quality)
+
+👉 All in one unified platform.
 
 ## 🔧 Configuration
 
