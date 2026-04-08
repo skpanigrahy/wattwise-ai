@@ -1,0 +1,26 @@
+meta {
+  name: Track Usage
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8000/costops/usage
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id": "santosh",
+    "model": "gpt-4o",
+    "source": "api",
+    "input_tokens": 1000,
+    "output_tokens": 500
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

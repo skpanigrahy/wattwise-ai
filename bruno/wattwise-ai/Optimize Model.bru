@@ -1,0 +1,24 @@
+meta {
+  name: Optimize Model
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8000/costops/optimize/model
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "gpt-4o",
+    "input_tokens": 1000,
+    "output_tokens": 500
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

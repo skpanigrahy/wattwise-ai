@@ -1,0 +1,22 @@
+meta {
+  name: Benchmark API
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8000/costops/advanced/benchmark
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "prompt": "Explain microservices architecture with examples"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

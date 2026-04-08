@@ -344,6 +344,68 @@ response = requests.post("http://localhost:8000/agent/query", json=query)
 print(response.json()["response"])
 ```
 
+### 🧪 API Usage (cURL Examples)
+
+#### ➤ Track AI Usage
+
+```bash id="r1x2k3"
+curl -X POST http://localhost:8000/costops/usage \
+-H "Content-Type: application/json" \
+-d '{
+  "user_id": "santosh",
+  "model": "gpt-4o",
+  "source": "api",
+  "input_tokens": 1000,
+  "output_tokens": 500
+}'
+```
+
+---
+
+#### ➤ Get Cost Analytics
+
+```bash id="a8n4mz"
+curl http://localhost:8000/costops/analytics/models
+```
+
+---
+
+#### ➤ Model Optimization
+
+```bash id="k3l9ps"
+curl -X POST http://localhost:8000/costops/optimize/model \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "gpt-4o",
+  "input_tokens": 1000,
+  "output_tokens": 500
+}'
+```
+
+---
+
+#### ➤ Prompt Optimization
+
+```bash id="x8d2qf"
+curl -X POST http://localhost:8000/costops/optimize/prompt \
+-H "Content-Type: application/json" \
+-d '{
+  "prompt": "Please explain in detail how microservices architecture works"
+}'
+```
+
+---
+
+#### ➤ Benchmark Models
+
+```bash id="p4t9ws"
+curl -X POST http://localhost:8000/costops/advanced/benchmark \
+-H "Content-Type: application/json" \
+-d '{
+  "prompt": "Explain microservices architecture with examples"
+}'
+```
+
 ---
 
 ## 🧠 Summary
